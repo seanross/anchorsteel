@@ -121,9 +121,10 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-		'Way\Generators\GeneratorsServiceProvider',
-		'Intervention\Image\ImageServiceProvider',                       //INTERVENTION IMAGE LIB
-		'Zizaco\Entrust\EntrustServiceProvider',
+                'Way\Generators\GeneratorsServiceProvider',
+                'Intervention\Image\ImageServiceProvider',                      //INTERVENTION IMAGE LIB
+                'Zizaco\Entrust\EntrustServiceProvider',                        //ENTRUST ROLES LIB
+                'Gloudemans\Shoppingcart\ShoppingcartServiceProvider',          //SHOPPING CART LIB
 	),
 
 	/*
@@ -190,8 +191,9 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
-		'ImageHelper'       => 'Intervention\Image\Facades\Image',       //INTERVENTION IMAGE LIB
-		'Entrust'           => 'Zizaco\Entrust\EntrustFacade',
+                'ImageHelper'       => 'Intervention\Image\Facades\Image',      //INTERVENTION IMAGE LIB
+                'Entrust'           => 'Zizaco\Entrust\EntrustFacade',          //ENTRUST ROLES LIB
+                'Cart'              => 'Gloudemans\Shoppingcart\Facades\Cart',  //SHOPPING CART LIB
 	),
 
 );

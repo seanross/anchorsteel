@@ -35,6 +35,11 @@ if(Schema::hasTable('products')){
 if(Schema::hasTable('products')){
 	View::share('featuredproducts', Product::where('featured', true)->get());
 }
+
+
+View::share('cart_quantity', Cart::count());
+
+View::share('cart_total', Cart::total());
 //END GLOBAL VARIABLES
 
 
@@ -57,6 +62,7 @@ Route::get('/login', function()
 
 Route::post('/logincheck', function(){
 	if (Auth::attempt(array('username'=>Input::get('username'), 'password'=>Input::get('password')))) {
+                Cart::destroy();
 		return Redirect::to('/')->with('message', 'You are now logged in!');
 	} else {
 		return Redirect::to('/login')
@@ -68,6 +74,7 @@ Route::post('/logincheck', function(){
 Route::get('/logout', function()
 {
 	Auth::logout();
+        Cart::destroy();
 	return Redirect::to('/')
 		->with('message', 'You logged out.')
 		->withInput();
@@ -172,6 +179,10 @@ Route::get('/admin/product/list',function(){
 	return View::make('admin_product_list')->with('products', Product::all());
 });
 
+Route::get('/product/list',function(){
+	return View::make('product_list')->with('products', Product::all());
+});
+
 Route::get('/product/list/{id}', function($id){
 	return View::make('product_list_by_category')->with('category', Category::find($id) );
 });
@@ -267,4 +278,24 @@ Route::post('/admin/manufacturer/save', function()
 
 Route::get('/admin/manufacturer/list', function(){
 	return View::make('admin_manufacturer_list')->with('manufacturers', Manufacturer::all());
+});
+
+
+
+Route::get('/cart/add/{id}', function($id){
+   return View::make('cart_add')->with('p', Product::find($id)); 
+});
+
+Route::post('/cart/save', function(){
+    $p = Product::find(Input::get('id'));
+    $discountedPrice = $p->price - ($p->price * ($p->discount/100));
+    $quantity = Input::get('quantity');
+//    $subTotal = $discountedPrice * $quantity;
+    Cart::add($p->id, $p->name, $quantity , $discountedPrice);
+   
+    return Redirect::to('/cart/list');
+});
+
+Route::get('/cart/list', function(){
+    return View::make('cart_list')->with('products', Cart::content());
 });

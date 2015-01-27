@@ -48,7 +48,7 @@
     </div>
     <div id="center-column">
       <div class="table">
-        {{ Form::open(array('url' => 'product/save', 'files' => true)) }}
+        {{ Form::open(array('url' => 'admin/product/save', 'files' => true)) }}
 
         <table class="listing form" cellpadding="0" cellspacing="0">
           <tr>
