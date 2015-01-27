@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Tools Shop</title>
+<title>Anchor Steel</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="{{ asset('style.css') }} " />
 <!--[if IE 6]>
@@ -25,13 +25,13 @@
   <div id="main_content">
     <div id="menu_tab">
       <ul class="menu">
-        <li><a href="#" class="nav"> Home </a></li>
+        <li><a href="{{ url('/') }}" class="nav"> Home </a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Products</a></li>
+        <li><a href="{{ url('/product/list') }}" class="nav">Products</a></li>
         <li class="divider"></li>
         <li><a href="#" class="nav">Specials</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">My account</a></li>
+        <li><a href="{{ url('/cart/list') }}" class="nav">My Cart</a></li>
         <li class="divider"></li>
         <li><a href="#" class="nav">Shipping </a></li>
         <li class="divider"></li>
@@ -68,8 +68,8 @@
       <div class="title_box">Featured</div>
       <div class="border_box">
           @if($featuredproduct != null)
-            <div class="product_title"><a href="#"> {{ $featuredproduct->name }} </a></div>
-            <div class="product_img"><a href="#"><img src="{{ $featuredproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
+            <div class="product_title"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"> {{ $featuredproduct->name }} </a></div>
+            <div class="product_img"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"><img src="{{ $featuredproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
             <div class="prod_price"><span class="reduce"> {{$featuredproduct->price }}</span> <span class="price">{{ $featuredproduct->price - ($featuredproduct->price * ($featuredproduct->discount/100)) }}</span></div>
           @else
             Not Available.
@@ -95,8 +95,8 @@
         @foreach($newproducts as $newproduct)
         <div class="prod_box">
           <div class="center_prod_box">
-            <div class="product_title"><a href="#"> {{$newproduct->name}} </a></div>
-            <div class="product_img"><a href="#"><img src="{{ $newproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
+            <div class="product_title"><a href="{{ url('/product/view/'. $newproduct->id) }}"> {{$newproduct->name}} </a></div>
+            <div class="product_img"><a href="{{ url('/product/view/'. $newproduct->id) }}"><img src="{{ $newproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
             <div class="prod_price"><span class="reduce"> {{$newproduct->price }}</span> <span class="price">{{ $newproduct->price - ($newproduct->price * ($newproduct->discount/100)) }}</span></div>
           </div>
           <div class="prod_details_tab"> <a href="{{ asset('cart/add/'. $newproduct->id)}}" class="prod_buy">Add to Cart</a> <a href="#" class="prod_details">Details</a> </div>
@@ -109,8 +109,8 @@
         @foreach($featuredproducts as $featuredproduct)
           <div class="prod_box">
             <div class="center_prod_box">
-              <div class="product_title"><a href="#"> {{$featuredproduct->name}} </a></div>
-              <div class="product_img"><a href="#"><img src="{{ $featuredproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
+              <div class="product_title"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"> {{$featuredproduct->name}} </a></div>
+              <div class="product_img"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"><img src="{{ $featuredproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
               <div class="prod_price"><span class="reduce"> {{$featuredproduct->price }}</span> <span class="price">{{ $featuredproduct->price - ($featuredproduct->price * ($featuredproduct->discount/100)) }}</span></div>
             </div>
             <div class="prod_details_tab"> <a href="{{ asset('cart/add/'. $featuredproduct->id)}}" class="prod_buy">Add to Cart</a> <a href="#" class="prod_details">Details</a> </div>
@@ -133,8 +133,8 @@
       <div class="title_box">New</div>
       <div class="border_box">
           @if($newproduct != null)
-            <div class="product_title"><a href="#"> {{$newproduct->name}} </a></div>
-            <div class="product_img"><a href="#"><img src="{{ $newproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
+            <div class="product_title"><a href="{{ url('/product/view/'. $newproduct->id) }}"> {{$newproduct->name}} </a></div>
+            <div class="product_img"><a href="{{ url('/product/view/'. $newproduct->id) }}"><img src="{{ $newproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
             <div class="prod_price"><span class="reduce"> {{$newproduct->price }}</span> <span class="price">{{ $newproduct->price - ($newproduct->price * ($newproduct->discount/100)) }}</span></div>
           @else
             Not Available.

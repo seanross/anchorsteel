@@ -67,7 +67,7 @@
             <div class="border_box">
                 @if($featuredproduct != null)
                 <div class="product_title"><a href="#"> {{$featuredproduct->name}} </a></div>
-                <div class="product_img"><a href="#"><img src="{{ asset($featuredproduct->images->random(1)->name) }}" alt="" border="0" /></a></div>
+                <div class="product_img"><a href="#"><img src="{{ $featuredproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
                 <div class="prod_price"><span class="reduce"> {{$featuredproduct->price }}</span> <span class="price">{{ $featuredproduct->price - ($featuredproduct->price * ($featuredproduct->discount/100)) }}</span></div>
                 @else
                 Not Available.
@@ -81,7 +81,7 @@
         </div>
         <!-- end of left content -->
         <div class="center_content">
-            <div class="center_title_bar">Products</div>
+            <div class="center_title_bar">Product View</div>
             <div class="prod_box_big">
                 <div class="center_prod_box_big">
 
@@ -96,20 +96,13 @@
                             </a>
                             @endforeach
                         </div>
-                        <div>
-                            {{ Form::open(array('url' => 'cart/save')) }}
-                            {{ Form::hidden('forUpdate', false) }}
-                            {{ Form::hidden('id', $p->id) }}
-                            Quantity : {{ Form::text('quantity') }}  <br/>
-                            {{ Form::submit('Add to Cart', array('class' => 'prod_buy')) }}
-                            {{ Form::close() }}
-                        </div>
                     </div>
 
                     <div class="details_big_box">
                         <div class="product_title_big">{{ $p->name }}</div>
                         <div class="specifications"> Available: <span class="blue">{{ $p->stock }} In stock</span><br />
                             Category :<span class="blue"> {{ $p->category->name }}</span><br />
+                            Warehouse: <span class="blue">{{ $p->warehouse->name }}</span><br />
                             Manufacturer: <span class="blue"> {{ $p->manufacturer->name }}</span><br />
                             Description :<span class="blue"> {{ $p->profile }} </span><br />
                         </div>
@@ -117,8 +110,7 @@
                             <span class="reduce">{{ $p->price }} PHP</span>
                             <span class="price">{{ $p->price - ($p->price * ($p->discount/100)) }} PHP</span>
                         </div>
-                        
-                    </div>
+                        <a href="#" class="prod_buy">add to cart</a> <a href="#" class="prod_compare">compare</a> </div>
                 </div>
             </div>
         </div>
@@ -139,7 +131,7 @@
             <div class="border_box">
                 @if($newproduct != null)
                 <div class="product_title"><a href="#"> {{$newproduct->name}} </a></div>
-                <div class="product_img"><a href="#"><img src="{{ asset($newproduct->images->random(1)->name) }}" alt="" border="0" /></a></div>
+                <div class="product_img"><a href="#"><img src="{{ $newproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
                 <div class="prod_price"><span class="reduce"> {{$newproduct->price }}</span> <span class="price">{{ $newproduct->price - ($newproduct->price * ($newproduct->discount/100)) }}</span></div>
                 @else
                 Not Available.

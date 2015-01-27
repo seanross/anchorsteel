@@ -223,9 +223,9 @@ footer {
       
         
         <header class="clearfix">
-      <div id="logo">
+<!--      <div id="logo">
         <img src="{{ asset('qw.jpg') }}">
-      </div>
+      </div>-->
       <h1><img src="{{ asset('images/shoppingcart.png') }}"> CART ITEMS <img src="{{ asset('images/shoppingcart.png') }}"></h1>
       <div id="company" class="clearfix">
         <div>Company Name</div>
@@ -262,10 +262,10 @@ footer {
                 <a href="{{ url('cart/add', $p->id) }}">
                       <img src="{{ asset('images/add-icon.gif') }}" width="16" height="16" alt="" />
                   </a>
-                  <a href="{{ url('cart/edit', $p->id) }}">
+                  <a href="{{ url('cart/edit', $p->id.  '/' .  $p->rowid) }}">
                       <img src="{{ asset('images/edit-icon.gif') }}" width="16" height="16" alt="" />
                   </a>
-                  <a href="{{ url('cart/delete', $p->id) }}">
+                  <a href="{{ url('cart/delete', $p->rowid) }}">
                       <img src="{{ asset('images/hr.gif') }}" width="16" height="16" alt="" />
                   </a>
             </td>

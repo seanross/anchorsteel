@@ -81,7 +81,7 @@
         </div>
         <!-- end of left content -->
         <div class="center_content">
-            <div class="center_title_bar">Products</div>
+            <div class="center_title_bar">Edit Product Quantity</div>
             <div class="prod_box_big">
                 <div class="center_prod_box_big">
 
@@ -98,10 +98,11 @@
                         </div>
                         <div>
                             {{ Form::open(array('url' => 'cart/save')) }}
-                            {{ Form::hidden('forUpdate', false) }}
+                            {{ Form::hidden('forUpdate', true) }}
                             {{ Form::hidden('id', $p->id) }}
+                            {{ Form::hidden('rowId', $rowId) }}
                             Quantity : {{ Form::text('quantity') }}  <br/>
-                            {{ Form::submit('Add to Cart', array('class' => 'prod_buy')) }}
+                            {{ Form::submit('Update to Cart', array('class' => 'prod_buy')) }}
                             {{ Form::close() }}
                         </div>
                     </div>

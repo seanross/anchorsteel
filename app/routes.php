@@ -187,6 +187,9 @@ Route::get('/product/list/{id}', function($id){
 	return View::make('product_list_by_category')->with('category', Category::find($id) );
 });
 
+Route::get('/product/view/{id}',function($id){
+	return View::make('product_view')->with('p', Product::find($id));
+});
 
 Route::get('/admin/category/add', function(){
 	return View::make('admin_category_add');
@@ -286,13 +289,28 @@ Route::get('/cart/add/{id}', function($id){
    return View::make('cart_add')->with('p', Product::find($id)); 
 });
 
+Route::get('/cart/edit/{id}/{rowId}', function($id, $rowId){
+    $data['rowId'] = $rowId;
+    $data['p'] = Product::find($id);
+   return View::make('cart_edit')->with($data); 
+});
+
 Route::post('/cart/save', function(){
     $p = Product::find(Input::get('id'));
     $discountedPrice = $p->price - ($p->price * ($p->discount/100));
     $quantity = Input::get('quantity');
-//    $subTotal = $discountedPrice * $quantity;
-    Cart::add($p->id, $p->name, $quantity , $discountedPrice);
-   
+    
+    if(Input::get('forUpdate')){
+        Cart::update(Input::get('rowId'), $quantity);
+    } else {
+         Cart::add($p->id, $p->name, $quantity , $discountedPrice);
+    }
+  
+    return Redirect::to('/cart/list');
+});
+
+Route::get('/cart/delete/{rowId}', function($rowId){
+    Cart::remove($rowId);
     return Redirect::to('/cart/list');
 });
 
