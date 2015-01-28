@@ -221,6 +221,7 @@ footer {
     <!-- end of left content -->
     <div class="center_content mainbody">
       
+       
         
         <header class="clearfix">
 <!--      <div id="logo">
@@ -291,6 +292,7 @@ footer {
       <div id="notices">
         <div>NOTICE:</div>
         <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+        <div><a href="#" class="">Finalize and Send the Order</a></div>
       </div>
     </main>
         

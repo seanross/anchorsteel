@@ -8,4 +8,8 @@ class Transaction extends \Eloquent {
             return $this->belongsToMany('Product');
         }
         
+        //One to Many
+        public function orders(){
+            return $this->hasMany('Order');
+        }
 }
