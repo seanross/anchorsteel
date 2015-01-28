@@ -15,6 +15,8 @@ class CreateOrdersTable extends Migration {
             Schema::create('orders', function($o){
                 $o->increments('id');
                 $o->integer('quantity');
+                $o->integer('product_id');
+                $o->integer('transaction_id');
                 $o->decimal('subtotal', 10, 2);
                 $o->timestamps();
             });
