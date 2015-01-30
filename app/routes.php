@@ -317,3 +317,8 @@ Route::get('/cart/delete/{rowId}', function($rowId){
 Route::get('/cart/list', function(){
     return View::make('cart_list')->with('products', Cart::content());
 });
+
+
+Route::get('/cart/invoice/preview', function(){
+    return View::make('invoice')->with('products', Cart::content());
+});

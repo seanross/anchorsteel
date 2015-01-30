@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost:3306',
 			'database'  => 'anchorsteel',
 			'username'  => 'root',
-			'password'  => '1234',
+			'password'  => 'root',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

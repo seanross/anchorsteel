@@ -157,7 +157,7 @@ footer {
       <div id="project">
 <!--        <div><span>PROJECT</span> Website development</div>-->
         <div><span>CLIENT</span> {{ Auth::user()->firstname ." ". Auth::user()->lastname }}</div>
-        <div><span>CLIENT</span> {{ Auth::user()->contactno }}</div>
+        <div><span>CONTACT</span> {{ Auth::user()->contactno }}</div>
         <div><span>ADDRESS</span> {{ Auth::user()->address }}</div>
         <div><span>EMAIL</span> <a href="mailto:{{ Auth::user()->email }}">{{ Auth::user()->email }}</a></div>
         <div><span>DATE</span>{{ Auth::user()->created_at }}</div>
@@ -210,8 +210,8 @@ footer {
         </tbody>
       </table>
       <div id="notices">
-        <div>NOTICE:</div>
-        <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+          
+          <h1> <a href="#" class="prod_buy">SEND YOUR ORDER</a></h1>
       </div>
     </main>
     <footer>
