@@ -8,4 +8,9 @@ class Transaction extends \Eloquent {
             return $this->belongsToMany('Product');
         }
         
+        //Many to 
+        public function user(){
+            return $this->belongsTo('User');
+        }
+        
 }

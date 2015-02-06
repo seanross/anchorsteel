@@ -14,7 +14,11 @@ class CreateTransactionsTable extends Migration {
 	{
             Schema::create('transactions', function($transaction){
                 $transaction->increments('id');
+                $transaction->integer('user_id');
+                $transaction->string('productname');
                 $transaction->string('status');
+                $transaction->integer('quantity');
+                $transaction->decimal('price', 10, 2);
                 $transaction->timestamps();
             });
 	}

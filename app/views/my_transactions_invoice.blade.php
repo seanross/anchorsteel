@@ -147,7 +147,7 @@ footer {
       <div id="logo">
         <img src="{{ asset('qw.jpg') }}">
       </div>
-      <h1><img src="{{ asset('images/shoppingcart.png') }}"> CART ITEMS <img src="{{ asset('images/shoppingcart.png') }}"></h1>
+      <h1><img src="{{ asset('images/shoppingcart.png') }}"> MY CURRENT ORDER <img src="{{ asset('images/shoppingcart.png') }}"></h1>
       <div id="company" class="clearfix">
         <div>Company Name</div>
         <div>455 Foggy Heights,<br /> AZ 85004, US</div>
@@ -169,49 +169,37 @@ footer {
         <thead>
           <tr>
             <th class="service">Description</th>
-            <th class="desc">Options</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Sub Total</th>
           </tr>
         </thead>
         <tbody>
-             @foreach ($products as $p)
+             @foreach ($transactions as $t)
           <tr>
-            <td class="service">{{ $p->name }}</td>
-            <td class="desc">
-                <a href="{{ url('cart/add', $p->id) }}">
-                      <img src="{{ asset('images/add-icon.gif') }}" width="16" height="16" alt="" />
-                  </a>
-                  <a href="{{ url('cart/edit', $p->id) }}">
-                      <img src="{{ asset('images/edit-icon.gif') }}" width="16" height="16" alt="" />
-                  </a>
-                  <a href="{{ url('cart/delete', $p->id) }}">
-                      <img src="{{ asset('images/hr.gif') }}" width="16" height="16" alt="" />
-                  </a>
-            </td>
-            <td class="unit">{{ $p->price }}</td>
-            <td class="qty">{{ $p->qty }}</td>
-            <td class="total">{{ $p->price * $p->qty }}</td>
+            <td class="service">{{ $t->productname }}</td>
+            <td class="unit">{{ $t->price }}</td>
+            <td class="qty">{{ $t->quantity }}</td>
+            <td class="total">{{ $t->price * $t->quantity }}</td>
           </tr>
             @endforeach
           <tr>
-            <td colspan="4"></td>
+            <td colspan="3"></td>
             <td class="total"></td>
           </tr>
           <tr>
-            <td colspan="4">TOTAL QUANTITY</td>
-            <td class="total">{{Cart::count()}}</td>
+            <td colspan="3">TOTAL QUANTITY</td>
+            <td class="total">{{$totalqty}}</td>
           </tr>
            <tr>
-            <td colspan="4" class="grand total">TOTAL PRICE</td>
-            <td class="grand total">{{Cart::total()}}</td>
+            <td colspan="3" class="grand total">TOTAL PRICE</td>
+            <td class="grand total">{{$total}}</td>
           </tr>
         </tbody>
       </table>
       <div id="notices">
           
-          <h1> <a href="{{ url('/cart/finalize') }}">SEND YOUR ORDER</a></h1>
+          <h1> <a href="{{ url('/my/transactions/cancel') }}">Cancel this order</a></h1>
       </div>
     </main>
     <footer>

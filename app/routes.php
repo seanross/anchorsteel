@@ -115,7 +115,7 @@ Route::post('/admin/user/update', function()
 	$u->attachRole(Role::find(Input::get("role")));
 	$u->save();
 
-	return View::make('thanks')->with('saved', Input::get('firstname'));
+	return  Redirect::to('/admin/user/list');
 });
 
 Route::get('/admin/user/list', function(){
@@ -172,7 +172,7 @@ Route::post('/admin/product/save', function(){
 		$image->product()->associate($p1);
 		$p1->images()->save($image);
 	}
-	return View::make('thanks')->with('saved', Input::get('pname'));
+	return  Redirect::to('/admin/product/list');
 });
 
 Route::get('/admin/product/list',function(){
@@ -210,7 +210,7 @@ Route::post('/admin/category/save', function()
 	$c->profile = Input::get('profile');
 	$c->save();
 
-	return View::make('thanks')->with('saved', Input::get('cname'));
+	return  Redirect::to('/admin/category/list');
 });
 
 Route::get('/admin/category/list', function(){
@@ -241,7 +241,7 @@ Route::post('/admin/warehouse/save', function()
 	$w->address = Input::get('address');
 	$w->save();
 
-	return View::make('thanks')->with('saved', Input::get('wname'));
+	return  Redirect::to('/admin/warehouse/list');
 });
 
 Route::get('/admin/warehouse/list',function(){
@@ -276,7 +276,7 @@ Route::post('/admin/manufacturer/save', function()
 	$w->website = Input::get('website');
 	$w->save();
 
-	return View::make('thanks')->with('saved', Input::get('mname'));
+	return  Redirect::to('/admin/manufacturer/list');
 });
 
 Route::get('/admin/manufacturer/list', function(){
@@ -321,4 +321,35 @@ Route::get('/cart/list', function(){
 
 Route::get('/cart/invoice/preview', function(){
     return View::make('invoice')->with('products', Cart::content());
+});
+
+Route::get('/cart/finalize', function(){
+    $user = User::find(Auth::id());
+    foreach(Cart::content() as $product){
+        $transaction = new Transaction();
+        $transaction->quantity = $product->qty;
+        $transaction->productname = $product->name;
+        $transaction->status = "pending";
+        $transaction->price = $product->price;
+        $transaction->user()->associate($user);
+        $transaction->save();
+    }
+   Cart::destroy();
+    return Redirect::to('/cart/list');
+});
+
+
+Route::get('/my/transactions/invoice',function(){
+    $user = User::find(Auth::id());
+    $total = 0.0;
+    $totalqty = 0;
+    $transactions = Transaction::where('user_id', Auth::id())->where('status', 'pending')->get();
+    foreach($transactions as $t){
+        $total += $t->price * $t->quantity;
+        $totalqty += $t->quantity;
+    }
+    return View::make('my_transactions_invoice')
+            ->with('transactions', $user->transactions)
+            ->with('total', $total)
+            ->with('totalqty', $totalqty);
 });
