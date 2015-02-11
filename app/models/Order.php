@@ -8,8 +8,8 @@ class Order extends \Eloquent {
             return $this->belongsTo('Transaction');
         }
         
-        //One to One
+        //Many to One
         public function product(){
-            return $this->hasOne('Product');
+            return $this->belongsTo('Product');
         }
 }

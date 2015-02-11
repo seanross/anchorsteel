@@ -21,13 +21,18 @@
     
   </div>
   <div id="main_content">
+      
     <div id="menu_tab">
       
         @include('layout_public.menu')
         
     </div>
+<!--        <div class="crumb_navigation">
+            <a href="#" class="lang"><img src="{{ asset('adminpanel.jpg') }}" width="50" height="50" alt="" border="0" /></a> 
+            <a href="#" class="lang"><img src="{{ asset('logout.jpg') }}" width="37" height="50" alt="" border="0" /></a> 
+       </div>-->
       
-      
+
    @if(Session::has('message'))
         <p class="alert">{{ Session::get('message') }}</p>
     @endif

@@ -2,7 +2,7 @@
 @section('content')
 
       <div class="table">
-        {{ Form::open(array('url' => 'product/save', 'files' => true)) }}
+        {{ Form::open(array('url' => 'admin/product/save')) }}
 
         {{ Form::hidden("id", $product->id) }}
 

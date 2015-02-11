@@ -30,7 +30,9 @@
                             <span class="reduce">{{ $p->price }} PHP</span>
                             <span class="price">{{ $p->price - ($p->price * ($p->discount/100)) }} PHP</span>
                         </div>
-                        <a href="#" class="prod_buy">add to cart</a> <a href="#" class="prod_compare">compare</a> </div>
+                        <a href="{{ asset('cart/add/'. $p->id)}}" class="prod_buy">add to cart</a>
+                    
+                    </div>
                 </div>
             </div>
         

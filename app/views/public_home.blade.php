@@ -1,13 +1,15 @@
 @extends('layout_public.template')
 @section('content')
 
-    <div class="oferta"> <img src="{{ asset('sample.jpg') }}" width="165" height="113" border="0" class="oferta_img" alt="" />
-      <div class="oferta_details">
-        <div class="oferta_title">Trusses po for sale!</div>
-        <div class="oferta_text"> In engineering, a truss is a structure that "consists of two-force members only, where the members are organized so that the assemblage as a whole behaves as a single object </div>
-        <a href="#" class="prod_buy">details</a> </div>
-    </div>
-
+    @if($featuredproduct != null)
+        <div class="oferta"> <img src="{{ asset($featuredproduct->images->random(1)->name) }}" width="165" height="113" border="0" class="oferta_img" alt="" />
+          <div class="oferta_details">
+            <div class="oferta_title">{{ $featuredproduct->name }}</div>
+            <div class="oferta_text"> {{ $featuredproduct->profile }}</div>
+            <a href="#" class="prod_buy">details</a> </div>
+        </div>
+    @endif
+    
     @if($newproducts != null)
     <div class="center_title_bar">Latest Products</div>
       @foreach($newproducts as $newproduct)

@@ -147,7 +147,7 @@ footer {
       <div id="logo">
         <img src="{{ asset('qw.jpg') }}">
       </div>
-      <h1><img src="{{ asset('images/shoppingcart.png') }}"> MY CURRENT ORDER <img src="{{ asset('images/shoppingcart.png') }}"></h1>
+      <h1><img src="{{ asset('images/shoppingcart.png') }}"> ORDER STATUS : {{ $transaction->status }} <img src="{{ asset('images/shoppingcart.png') }}"></h1>
       <div id="company" class="clearfix">
         <div>Company Name</div>
         <div>455 Foggy Heights,<br /> AZ 85004, US</div>
@@ -175,12 +175,12 @@ footer {
           </tr>
         </thead>
         <tbody>
-             @foreach ($transactions as $t)
+             @foreach ($transaction->orders as $order)
           <tr>
-            <td class="service">{{ $t->productname }}</td>
-            <td class="unit">{{ $t->price }}</td>
-            <td class="qty">{{ $t->quantity }}</td>
-            <td class="total">{{ $t->price * $t->quantity }}</td>
+            <td class="service">{{ $order->product->name }}</td>
+            <td class="unit">{{ $order->price }}</td>
+            <td class="qty">{{ $order->quantity }}</td>
+            <td class="total">{{ $order->price}}</td>
           </tr>
             @endforeach
           <tr>
@@ -189,11 +189,11 @@ footer {
           </tr>
           <tr>
             <td colspan="3">TOTAL QUANTITY</td>
-            <td class="total">{{$totalqty}}</td>
+            <td class="total">{{ $transaction->orders->sum('quantity') }}</td>
           </tr>
            <tr>
             <td colspan="3" class="grand total">TOTAL PRICE</td>
-            <td class="grand total">{{$total}}</td>
+            <td class="grand total">{{ $transaction->orders->sum('price') }}</td>
           </tr>
         </tbody>
       </table>

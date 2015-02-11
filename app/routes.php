@@ -326,31 +326,36 @@ Route::get('/cart/invoice/preview', function(){
 
 Route::get('/cart/finalize', function(){
     $user = User::find(Auth::id());
-    foreach(Cart::content() as $product){
-        $transaction = new Transaction();
-        $transaction->quantity = $product->qty;
-        $transaction->productname = $product->name;
-        $transaction->status = "pending";
-        $transaction->price = $product->price;
-        $transaction->user()->associate($user);
-        $transaction->save();
+    $transaction = new Transaction();
+    $transaction->status = "pending";
+    $transaction->user()->associate($user);            
+    $user->transactions()->save($transaction);
+    
+    foreach(Cart::content() as $item){
+        $product = Product::find($item->id);
+        $order = new Order();
+        $order->quantity = $item->qty;
+        $order->price = $item->price;
+        $order->product()->associate($product);
+        $order->transaction()->associate($transaction);
+        $order->save();
+        $product->stock -= $item->qty;
+        $product->orders()->save($order);
     }
    Cart::destroy();
     return Redirect::to('/cart/list');
 });
 
 
-Route::get('/my/transactions/invoice',function(){
-    $user = User::find(Auth::id());
-    $total = 0.0;
-    $totalqty = 0;
-    $transactions = Transaction::where('user_id', Auth::id())->where('status', 'pending')->get();
-    foreach($transactions as $t){
-        $total += $t->price * $t->quantity;
-        $totalqty += $t->quantity;
-    }
-    return View::make('public_my_transactions_invoice')
-            ->with('transactions', $user->transactions)
-            ->with('total', $total)
-            ->with('totalqty', $totalqty);
+Route::get('/my/transactions/view/{id}',function($id){
+   return View::make('public_my_transactions_invoice')->with('transaction', Transaction::find($id));
+});
+
+Route::get('/my/transactions/list', function(){
+    $transactions = Transaction::where('user_id', Auth::id())->get(); 
+    return View::make('public_my_transactions_list')->with('transactions', $transactions);
+});
+
+Route::get('/admin/home', function(){
+   return View::make('admin_home');
 });

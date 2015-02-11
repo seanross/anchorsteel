@@ -13,7 +13,7 @@
 <div class="border_box">
     @if($featuredproduct != null)
       <div class="product_title"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"> {{ $featuredproduct->name }} </a></div>
-      <div class="product_img"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"><img src="{{ $featuredproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
+      <div class="product_img"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"><img src="{{ asset($featuredproduct->images->random(1)->name) }}" alt="" border="0" /></a></div>
       <div class="prod_price"><span class="reduce"> {{$featuredproduct->price }}</span> <span class="price">{{ $featuredproduct->price - ($featuredproduct->price * ($featuredproduct->discount/100)) }}</span></div>
     @else
       Not Available.

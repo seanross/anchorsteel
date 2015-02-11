@@ -3,9 +3,9 @@
 class Product extends \Eloquent {
 	protected $fillable = [];
         
-        //Many To Many
-        public function transactions(){
-            return $this->belongsToMany('Transaction');
+        //One To Many
+        public function orders(){
+            return $this->hasMany('Order');
         }
         
         //Many To One
