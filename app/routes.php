@@ -47,17 +47,17 @@ View::share('cart_total', Cart::total());
 
 Route::get('/', function()
 {
-	return View::make('home');
+	return View::make('public_home');
 });
 
 Route::get('/register', function()
 {
-	return View::make('signup');
+	return View::make('public_signup');
 });
 
 Route::get('/login', function()
 {
-	return View::make('login');
+	return View::make('public_login');
 });
 
 Route::post('/logincheck', function(){
@@ -93,7 +93,7 @@ Route::post('/signup', function()
 	$user->address = Input::get('address');
 	$user->contactno = Input::get('contactno');
 	$user->save();
-	return View::make('thanks')->with('saved', Input::get('email'));
+	return Redirect::to('/admin/user/list');
 });
 
 
@@ -115,7 +115,7 @@ Route::post('/admin/user/update', function()
 	$u->attachRole(Role::find(Input::get("role")));
 	$u->save();
 
-	return  Redirect::to('/admin/user/list');
+	return Redirect::to('/admin/user/list');
 });
 
 Route::get('/admin/user/list', function(){
@@ -177,18 +177,6 @@ Route::post('/admin/product/save', function(){
 
 Route::get('/admin/product/list',function(){
 	return View::make('admin_product_list')->with('products', Product::all());
-});
-
-Route::get('/product/list',function(){
-	return View::make('product_list')->with('products', Product::all());
-});
-
-Route::get('/product/list/{id}', function($id){
-	return View::make('product_list_by_category')->with('category', Category::find($id) );
-});
-
-Route::get('/product/view/{id}',function($id){
-	return View::make('product_view')->with('p', Product::find($id));
 });
 
 Route::get('/admin/category/add', function(){
@@ -285,14 +273,27 @@ Route::get('/admin/manufacturer/list', function(){
 
 
 
+Route::get('/product/list',function(){
+	return View::make('public_product_list')->with('products', Product::all());
+});
+
+Route::get('/product/list/{id}', function($id){
+	return View::make('public_product_list_by_category')->with('category', Category::find($id) );
+});
+
+Route::get('/product/view/{id}',function($id){
+	return View::make('public_product_view')->with('p', Product::find($id));
+});
+
+
 Route::get('/cart/add/{id}', function($id){
-   return View::make('cart_add')->with('p', Product::find($id)); 
+   return View::make('public_cart_add')->with('p', Product::find($id)); 
 });
 
 Route::get('/cart/edit/{id}/{rowId}', function($id, $rowId){
     $data['rowId'] = $rowId;
     $data['p'] = Product::find($id);
-   return View::make('cart_edit')->with($data); 
+   return View::make('public_cart_edit')->with($data); 
 });
 
 Route::post('/cart/save', function(){
@@ -315,12 +316,12 @@ Route::get('/cart/delete/{rowId}', function($rowId){
 });
 
 Route::get('/cart/list', function(){
-    return View::make('cart_list')->with('products', Cart::content());
+    return View::make('public_cart_list')->with('products', Cart::content());
 });
 
 
 Route::get('/cart/invoice/preview', function(){
-    return View::make('invoice')->with('products', Cart::content());
+    return View::make('public_invoice')->with('products', Cart::content());
 });
 
 Route::get('/cart/finalize', function(){
@@ -348,7 +349,7 @@ Route::get('/my/transactions/invoice',function(){
         $total += $t->price * $t->quantity;
         $totalqty += $t->quantity;
     }
-    return View::make('my_transactions_invoice')
+    return View::make('public_my_transactions_invoice')
             ->with('transactions', $user->transactions)
             ->with('total', $total)
             ->with('totalqty', $totalqty);
