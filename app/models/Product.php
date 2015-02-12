@@ -34,4 +34,8 @@ class Product extends \Eloquent {
           $this->attributes['created_at'] = \Carbon\Carbon::createFromFormat('m/d/Y', $value);
         }
         
+        public function getDiscountedPrice(){
+            return $this->price - ($this->price * ($this->discount/100));
+        }
+        
 }

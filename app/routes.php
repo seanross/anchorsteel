@@ -36,7 +36,6 @@ if(Schema::hasTable('products')){
 	View::share('featuredproducts', Product::where('featured', true)->get());
 }
 
-
 View::share('cart_quantity', Cart::count());
 
 View::share('cart_total', Cart::total());
@@ -52,7 +51,13 @@ Route::get('/', function()
 
 Route::get('/register', function()
 {
-	return View::make('public_signup');
+    $captchaConfig = array(
+      'CaptchaId' => 'ExampleCaptcha', // an unique Id for the Captcha instance
+      'UserInputId' => 'CaptchaCode' // the Id of the Captcha code input textbox
+    );
+    $captcha = BotDetectCaptcha\LaravelCaptcha\BotDetectLaravelCaptcha::GetCaptchaInstance($captchaConfig);
+    return View::make('public_signup')->with('captchaHtml', $captcha->Html());
+    
 });
 
 Route::get('/login', function()
@@ -83,27 +88,46 @@ Route::get('/logout', function()
 
 Route::post('/signup', function()
 {
-	$user = new User();
-	$user->email = Input::get('email');
-	$user->username = Input::get('username');
-	$user->password = Hash::make(Input::get('password'));
-	$user->firstname = Input::get('firstname');
-	$user->middlename = Input::get('middlename');
-	$user->lastname = Input::get('lastname');
-	$user->address = Input::get('address');
-	$user->contactno = Input::get('contactno');
-	$user->save();
-	return Redirect::to('/admin/user/list');
+    if (Request::isMethod('post')) {
+        $code = Input::get('CaptchaCode');
+        $captchaConfig = array(
+            'CaptchaId' => 'ExampleCaptcha', // an unique Id for the Captcha instance
+            'UserInputId' => 'CaptchaCode' // the Id of the Captcha code input textbox
+          );
+        $captcha = BotDetectCaptcha\LaravelCaptcha\BotDetectLaravelCaptcha::GetCaptchaInstance($captchaConfig);
+        $isHuman = $captcha->Validate($code);
+
+        if ($isHuman) {
+            $user = new User();
+            $user->email = Input::get('email');
+            $user->username = Input::get('username');
+            $user->password = Hash::make(Input::get('password'));
+            $user->firstname = Input::get('firstname');
+            $user->middlename = Input::get('middlename');
+            $user->lastname = Input::get('lastname');
+            $user->address = Input::get('address');
+            $user->contactno = Input::get('contactno');
+            $user->save();
+            return Redirect::to('/');
+        } else {
+            return Redirect::to('/register');
+        }
+    }
 });
 
 
-Route::get('/admin/user/edit/{id}', function($id){
+Route::get('/admin/home', array('before' => 'adminOnly', function(){
+   return View::make('admin_home');
+}));
+
+
+Route::get('/admin/user/edit/{id}',  array('before' => 'adminOnly', function($id){
 	$data['role_options'] = DB::table('roles')->orderBy('name', 'asc')->lists('name','id');
 	$data['user'] = User::find($id);
 	return View::make('admin_user_edit')->with($data);
-});
+}));
 
-Route::post('/admin/user/update', function()
+Route::post('/admin/user/update',  array('before' => 'adminOnly', function()
 {
 	$u = User::find(Input::get('id'));
 	$u->email = Input::get('email');
@@ -112,39 +136,36 @@ Route::post('/admin/user/update', function()
 	$u->lastname = Input::get('lastname');
 	$u->address = Input::get('address');
 	$u->contactno = Input::get('contactno');
-	$u->attachRole(Role::find(Input::get("role")));
+        $u->roles()->detach(); //need to para madelete ung mga current na relationship
+	$u->attachRole(Role::find(Input::get("role"))); // then attach para malagyan
 	$u->save();
 
 	return Redirect::to('/admin/user/list');
-});
+}));
 
-Route::get('/admin/user/list', function(){
+Route::get('/admin/user/list',  array('before' => 'adminOnly', function(){
 	return View::make('admin_user_list')->with('users', User::all());
-});
+}));
 
 
 
-Route::get('/admin', function()
-{
-	return View::make('admin');
-});
 
-Route::get('/admin/product/add', function(){
+Route::get('/admin/product/add',  array('before' => 'adminOnly', function(){
 	$data['warehouse_options'] = DB::table('warehouses')->orderBy('name', 'asc')->lists('name','id');
 	$data['category_options'] = DB::table('categories')->orderBy('name', 'asc')->lists('name','id');
 	$data['manufacturer_options'] = DB::table('manufacturers')->orderBy('name', 'asc')->lists('name','id');
 	return View::make('admin_product_add')->with($data);
-});
+}));
 
-Route::get('/admin/product/edit/{id}', function($id){
+Route::get('/admin/product/edit/{id}',  array('before' => 'adminOnly',  function($id){
 	$data['warehouse_options'] = DB::table('warehouses')->orderBy('name', 'asc')->lists('name','id');
 	$data['category_options'] = DB::table('categories')->orderBy('name', 'asc')->lists('name','id');
 	$data['manufacturer_options'] = DB::table('manufacturers')->orderBy('name', 'asc')->lists('name','id');
 	$data['product'] = Product::find($id);
 	return View::make('admin_product_edit')->with($data);
-});
+}));
 
-Route::post('/admin/product/save', function(){
+Route::post('/admin/product/save',  array('before' => 'adminOnly', function(){
 	if(Input::get("id") == null){
 		//UPLOAD FILE THEN ADD THE IMAGE OBJECT TO THE PRODUCT
 		$file = Input::file('file');
@@ -173,21 +194,21 @@ Route::post('/admin/product/save', function(){
 		$p1->images()->save($image);
 	}
 	return  Redirect::to('/admin/product/list');
-});
+}));
 
-Route::get('/admin/product/list',function(){
+Route::get('/admin/product/list',  array('before' => 'adminOnly', function(){
 	return View::make('admin_product_list')->with('products', Product::all());
-});
+}));
 
-Route::get('/admin/category/add', function(){
+Route::get('/admin/category/add',  array('before' => 'adminOnly', function(){
 	return View::make('admin_category_add');
-});
+}));
 
-Route::get('/admin/category/edit/{id}', function($id){
+Route::get('/admin/category/edit/{id}',  array('before' => 'adminOnly',  function($id){
 	return View::make('admin_category_edit')->with('category', Category::find($id));
-});
+}));
 
-Route::post('/admin/category/save', function()
+Route::post('/admin/category/save',  array('before' => 'adminOnly', function()
 {
 	if(Input::get('id') == null){
 		$c = new Category();
@@ -199,26 +220,26 @@ Route::post('/admin/category/save', function()
 	$c->save();
 
 	return  Redirect::to('/admin/category/list');
-});
+}));
 
-Route::get('/admin/category/list', function(){
+Route::get('/admin/category/list',  array('before' => 'adminOnly',  function(){
 	return View::make('admin_category_list')->with('categories', Category::all());
-});
+}));
 
 
 
 
 
 
-Route::get('/admin/warehouse/add', function(){
+Route::get('/admin/warehouse/add',  array('before' => 'adminOnly', function(){
 	return View::make('admin_warehouse_add');
-});
+}));
 
-Route::get('/admin/warehouse/edit/{id}', function($id){
+Route::get('/admin/warehouse/edit/{id}',  array('before' => 'adminOnly', function($id){
 	return View::make('admin_warehouse_edit')->with('warehouse', Warehouse::find($id));
-});
+}));
 
-Route::post('/admin/warehouse/save', function()
+Route::post('/admin/warehouse/save',  array('before' => 'adminOnly', function()
 {
 	if(Input::get('id') == null){
 		$w = new Warehouse();
@@ -230,25 +251,25 @@ Route::post('/admin/warehouse/save', function()
 	$w->save();
 
 	return  Redirect::to('/admin/warehouse/list');
-});
+}));
 
-Route::get('/admin/warehouse/list',function(){
+Route::get('/admin/warehouse/list', array('before' => 'adminOnly', function(){
 	return View::make('admin_warehouse_list')->with('warehouses', Warehouse::all());
-});
+}));
 
 
 
 
 
-Route::get('/admin/manufacturer/add', function(){
+Route::get('/admin/manufacturer/add', array('before' => 'adminOnly',  function(){
 	return View::make('admin_manufacturer_add');
-});
+}));
 
-Route::get('/admin/manufacturer/edit/{id}', function($id){
+Route::get('/admin/manufacturer/edit/{id}', array('before' => 'adminOnly',  function($id){
 	return View::make('admin_manufacturer_edit')->with('manufacturer', Manufacturer::find($id));
-});
+}));
 
-Route::post('/admin/manufacturer/save', function()
+Route::post('/admin/manufacturer/save',  array('before' => 'adminOnly', function()
 {
 	if(Input::get('id') == null){
 		$w = new Manufacturer();
@@ -265,11 +286,26 @@ Route::post('/admin/manufacturer/save', function()
 	$w->save();
 
 	return  Redirect::to('/admin/manufacturer/list');
-});
+}));
 
-Route::get('/admin/manufacturer/list', function(){
+Route::get('/admin/manufacturer/list',  array('before' => 'adminOnly',  function(){
 	return View::make('admin_manufacturer_list')->with('manufacturers', Manufacturer::all());
-});
+}));
+
+
+
+Route::get('/admin/transaction/list', array('before' => 'adminOnly',  function(){
+    return View::make('admin_transaction_list')->with('transactions', Transaction::orderBy('created_at', 'DESC')->get());
+}));
+
+Route::get('/admin/transaction/receive/{id}', array('before' => 'adminOnly',  function($id){
+    $transaction = Transaction::find($id);
+    $transaction->status = 'received';
+    $transaction->received_by = Auth::user()->username;
+    $transaction->save();
+    return View::make('admin_transaction_receive')->with('transaction', $transaction);
+}));
+
 
 
 
@@ -285,18 +321,28 @@ Route::get('/product/view/{id}',function($id){
 	return View::make('public_product_view')->with('p', Product::find($id));
 });
 
-
-Route::get('/cart/add/{id}', function($id){
-   return View::make('public_cart_add')->with('p', Product::find($id)); 
+Route::post('/product/search', function(){
+    $q = Input::get('search_prod');
+    $searchTerms = explode(' ', $q);
+    $query = DB::table('products');
+    foreach($searchTerms as $term){
+        $query->where('name', 'LIKE', '%'. $term .'%');
+    }
+	return View::make('public_product_list')->with('products', $query->get());
 });
 
-Route::get('/cart/edit/{id}/{rowId}', function($id, $rowId){
+
+Route::get('/cart/add/{id}', array('before' => 'buyerOnly',  function($id){
+   return View::make('public_cart_add')->with('p', Product::find($id)); 
+}));
+
+Route::get('/cart/edit/{id}/{rowId}', array('before' => 'buyerOnly',  function($id, $rowId){
     $data['rowId'] = $rowId;
     $data['p'] = Product::find($id);
    return View::make('public_cart_edit')->with($data); 
-});
+}));
 
-Route::post('/cart/save', function(){
+Route::post('/cart/save',  array('before' => 'buyerOnly',  function(){
     $p = Product::find(Input::get('id'));
     $discountedPrice = $p->price - ($p->price * ($p->discount/100));
     $quantity = Input::get('quantity');
@@ -308,23 +354,27 @@ Route::post('/cart/save', function(){
     }
   
     return Redirect::to('/cart/list');
-});
+}));
 
-Route::get('/cart/delete/{rowId}', function($rowId){
+Route::get('/cart/delete/{rowId}', array('before' => 'buyerOnly',   function($rowId){
     Cart::remove($rowId);
     return Redirect::to('/cart/list');
-});
+}));
 
-Route::get('/cart/list', function(){
+Route::get('/cart/list', array('before' => 'buyerOnly',   function(){
     return View::make('public_cart_list')->with('products', Cart::content());
-});
+}));
 
+Route::get('/cart/clear', array('before' => 'buyerOnly',  function(){
+    Cart::destroy();
+    return Redirect::to('/cart/list');
+}));
 
-Route::get('/cart/invoice/preview', function(){
+Route::get('/cart/invoice/preview', array('before' => 'buyerOnly', function(){
     return View::make('public_invoice')->with('products', Cart::content());
-});
+}));
 
-Route::get('/cart/finalize', function(){
+Route::get('/cart/finalize', array('before' => 'buyerOnly', function(){
     $user = User::find(Auth::id());
     $transaction = new Transaction();
     $transaction->status = "pending";
@@ -339,23 +389,19 @@ Route::get('/cart/finalize', function(){
         $order->product()->associate($product);
         $order->transaction()->associate($transaction);
         $order->save();
-        $product->stock -= $item->qty;
+        $product->stock = $product->stock - $item->qty;
         $product->orders()->save($order);
+        $product->save();   //SAVE AGAIN TO UPDATE THE STOCK
     }
    Cart::destroy();
     return Redirect::to('/cart/list');
-});
+}));
 
-
-Route::get('/my/transactions/view/{id}',function($id){
+Route::get('/my/transactions/view/{id}', array('before' => 'buyerOnly', function($id){
    return View::make('public_my_transactions_invoice')->with('transaction', Transaction::find($id));
-});
+}));
 
-Route::get('/my/transactions/list', function(){
+Route::get('/my/transactions/list', array('before' => 'buyerOnly', function(){
     $transactions = Transaction::where('user_id', Auth::id())->get(); 
     return View::make('public_my_transactions_list')->with('transactions', $transactions);
-});
-
-Route::get('/admin/home', function(){
-   return View::make('admin_home');
-});
+}));

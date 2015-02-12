@@ -6,7 +6,8 @@
           <div class="oferta_details">
             <div class="oferta_title">{{ $featuredproduct->name }}</div>
             <div class="oferta_text"> {{ $featuredproduct->profile }}</div>
-            <a href="#" class="prod_buy">details</a> </div>
+            <a href="{{ url('/product/view/'. $featuredproduct->id) }}" class="prod_details">Details</a> 
+          </div>
         </div>
     @endif
     
@@ -17,9 +18,23 @@
         <div class="center_prod_box">
           <div class="product_title"><a href="{{ url('/product/view/'. $newproduct->id) }}"> {{$newproduct->name}} </a></div>
           <div class="product_img"><a href="{{ url('/product/view/'. $newproduct->id) }}"><img src="{{ $newproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
-          <div class="prod_price"><span class="reduce"> {{$newproduct->price }}</span> <span class="price">{{ $newproduct->price - ($newproduct->price * ($newproduct->discount/100)) }}</span></div>
+          <div class="prod_price">
+                @if($newproduct->discount > 0)
+                <span class="reduce"> {{$newproduct->price }}</span> 
+                <span class="price">{{ $newproduct->getDiscountedPrice() }} PHP</span>
+                @else
+                <span class="price"> {{$newproduct->price }} PHP</span>
+                @endif
+          </div>
         </div>
-        <div class="prod_details_tab"> <a href="{{ asset('cart/add/'. $newproduct->id)}}" class="prod_buy">Add to Cart</a> <a href="#" class="prod_details">Details</a> </div>
+        <div class="prod_details_tab"> 
+            @if($newproduct->stock > 0)
+            <a href="{{ asset('cart/add/'. $newproduct->id)}}" class="prod_buy">Add to Cart</a> 
+            @else
+                OUT of STOCK
+            @endif
+            <a href="{{ url('/product/view/'. $newproduct->id) }}" class="prod_details">Details</a> 
+        </div>
       </div>
       @endforeach
     @endif      
@@ -31,9 +46,23 @@
           <div class="center_prod_box">
             <div class="product_title"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"> {{$featuredproduct->name}} </a></div>
             <div class="product_img"><a href="{{ url('/product/view/'. $featuredproduct->id) }}"><img src="{{ $featuredproduct->images->random(1)->name }}" alt="" border="0" /></a></div>
-            <div class="prod_price"><span class="reduce"> {{$featuredproduct->price }}</span> <span class="price">{{ $featuredproduct->price - ($featuredproduct->price * ($featuredproduct->discount/100)) }}</span></div>
+            <div class="prod_price">
+                @if($featuredproduct->discount > 0)
+                <span class="reduce"> {{$featuredproduct->price }}</span> 
+                <span class="price">{{ $featuredproduct->getDiscountedPrice() }} PHP</span>
+                @else
+                <span class="price"> {{$featuredproduct->price }} PHP</span>
+                @endif
+            </div>
           </div>
-          <div class="prod_details_tab"> <a href="{{ asset('cart/add/'. $featuredproduct->id)}}" class="prod_buy">Add to Cart</a> <a href="#" class="prod_details">Details</a> </div>
+          <div class="prod_details_tab"> 
+              @if($featuredproduct->stock > 0)
+              <a href="{{ asset('cart/add/'. $featuredproduct->id)}}" class="prod_buy">Add to Cart</a> 
+              @else
+                OUT of STOCK
+              @endif
+              <a href="{{ url('/product/view/'. $featuredproduct->id) }}" class="prod_details">Details</a> 
+          </div>
         </div>
       @endforeach
     @endif

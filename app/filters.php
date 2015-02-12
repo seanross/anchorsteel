@@ -46,6 +46,27 @@ Route::filter('auth', function()
 			return Redirect::guest('login');
 		}
 	}
+       
+});
+
+Route::filter('adminOnly', function(){
+    if(Auth::check()){
+        if(!Auth::user()->hasRole('Admin')){
+            return Response::make('Unauthorized', 401);
+        }
+    } else {
+        return Redirect::guest('login');
+    }
+});
+
+Route::filter('buyerOnly', function(){
+    if(Auth::check()){
+        if(!Auth::user()->hasRole('Buyer')){
+            return Response::make('Unauthorized', 401);
+        }
+    }else{
+        return Redirect::guest('login');
+    }
 });
 
 

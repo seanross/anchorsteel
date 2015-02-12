@@ -13,4 +13,12 @@ class Transaction extends \Eloquent {
             return $this->belongsTo('User');
         }
         
+        public function getTotalQuantity(){
+            return $this->orders->sum('quantity');
+        }
+        
+        public function getGrandTotal(){
+            return $this->orders->sum('price') * $this->orders->sum('quantity');
+        }
+        
 }

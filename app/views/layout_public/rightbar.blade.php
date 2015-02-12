@@ -1,8 +1,12 @@
 
 <div class="title_box">Search</div>
 <div class="border_box">
-  <input type="text" name="newsletter" class="newsletter_input" value="keyword"/>
-  <a href="#" class="join">search</a> </div>
+  {{ Form::open(array('url' => 'product/search')) }}
+
+  {{ Form::text('search_prod', '', array('class' => 'newsletter_input')) }}
+  {{ Form::submit('Search') }}
+  {{ Form::close() }}
+</div>
   @if(Auth::check())
     <div class="shopping_cart">
       <div class="title_box">Shopping cart</div>
@@ -16,7 +20,14 @@
     @if($newproduct != null)
       <div class="product_title"><a href="{{ url('/product/view/'. $newproduct->id) }}"> {{$newproduct->name}} </a></div>
       <div class="product_img"><a href="{{ url('/product/view/'. $newproduct->id) }}"><img src="{{ asset($newproduct->images->random(1)->name) }}" alt="" border="0" /></a></div>
-      <div class="prod_price"><span class="reduce"> {{$newproduct->price }}</span> <span class="price">{{ $newproduct->price - ($newproduct->price * ($newproduct->discount/100)) }}</span></div>
+      <div class="prod_price">
+          @if($newproduct->discount > 0)
+          <span class="reduce"> {{$newproduct->price }}</span> 
+          <span class="price">{{ $newproduct->getDiscountedPrice() }} PHP</span>
+          @else
+          <span class="price"> {{$newproduct->price }} PHP</span>
+          @endif
+      </div>
     @else
       Not Available.
     @endif

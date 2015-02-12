@@ -3,7 +3,7 @@
 
 
             <div class="top-bar">
-                <h1>Products List</h1>
+                <h1>Users' List</h1>
             </div>
             <div class="select-bar">
                 <label>
@@ -40,7 +40,7 @@
                         <td>{{$p->created_at}}</td>
                         <td>{{$p->updated_at}}</td>
                         <td>
-                            <a href="{{ url('admin/product/edit', $p->id) }}"><img src="{{ asset("images/edit-icon.gif") }}" width="16" height="16" alt="" /></a>
+                            <a href="{{ url('admin/user/edit', $p->id) }}"><img src="{{ asset("images/edit-icon.gif") }}" width="16" height="16" alt="" /></a>
                             <a href="#"><img src="{{ asset("images/hr.gif") }}" width="16" height="16" alt="" /></a>
                         </td>
                     </tr>

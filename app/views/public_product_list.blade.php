@@ -24,15 +24,24 @@
                 <div class="product_title_big">{{ $p->name }}</div>
                 <div class="specifications"> Available: <span class="blue">{{ $p->stock }} In stock</span><br />
                   Category :<span class="blue"> {{ $p->category->name }}</span><br />
-                  Warehouse: <span class="blue">{{ $p->warehouse->name }}</span><br />
-                  Transport: <span class="blue"> delivery services company</span><br />
+                  Warehouse :<span class="blue">{{ $p->warehouse->name }}</span><br />
+                  Manufacturer :<span class="blue">{{ $p->manufacturer->name }}</span><br />
                   Description :<span class="blue"> {{ $p->profile }} </span><br />
                 </div>
                 <div class="prod_price_big">
+                    @if($p->discount > 0)
                     <span class="reduce">{{ $p->price }} PHP</span> 
-                    <span class="price">{{ $p->price - ($p->price * ($p->discount/100)) }} PHP</span>
+                    <span class="price">{{ $p->getDiscountedPrice() }} PHP</span>
+                    @else
+                    <span class="price">{{ $p->price }} PHP</span> 
+                    @endif
                 </div>
-                <a href="{{ asset('cart/add/'. $p->id)}}" class="prod_buy">add to cart</a> 
+                @if($p->stock > 0)
+                    <a href="{{ asset('cart/add/'. $p->id)}}" class="prod_buy">Add to Cart</a> 
+                    @else
+                      SORRY! OUT OF STOCK.
+                    @endif
+                  <a href="{{ url('/product/view/'. $p->id) }}" class="prod_details">Details</a>
               </div>
                 
             </div>

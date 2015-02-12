@@ -125,6 +125,7 @@ return array(
                 'Intervention\Image\ImageServiceProvider',                      //INTERVENTION IMAGE LIB
                 'Zizaco\Entrust\EntrustServiceProvider',                        //ENTRUST ROLES LIB
                 'Gloudemans\Shoppingcart\ShoppingcartServiceProvider',          //SHOPPING CART LIB
+                'BotDetectCaptcha\LaravelCaptcha\LaravelCaptchaServiceProvider',//CAPTCHA LIB
 	),
 
 	/*
@@ -194,6 +195,8 @@ return array(
                 'ImageHelper'       => 'Intervention\Image\Facades\Image',      //INTERVENTION IMAGE LIB
                 'Entrust'           => 'Zizaco\Entrust\EntrustFacade',          //ENTRUST ROLES LIB
                 'Cart'              => 'Gloudemans\Shoppingcart\Facades\Cart',  //SHOPPING CART LIB
+                'Carbon'            => 'Carbon\Carbon',                         //Date Helper
+                'BotCaptcha'        => 'BotDetectCaptcha\LaravelCaptcha\BotDetectLaravelCaptcha'//CAPTCHA LIB
 	),
 
 );

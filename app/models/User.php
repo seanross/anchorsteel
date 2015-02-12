@@ -30,4 +30,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
             return $this->hasMany('Transaction');
         }
         
+        public function getFullName(){
+            if(strlen($this->middlename)>0){
+                return $this->firstname . " " . $this->middlename . " " . $this->lastname;
+            } else {
+                return $this->firstname . " " . $this->lastname;
+            }
+        }
+        
 }

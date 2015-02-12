@@ -1,4 +1,9 @@
 @extends('layout_public.template')
+
+@section('styles')
+    {{ HTML::style(CaptchaUrls::LayoutStylesheetUrl()) }}
+@show
+
 @section('content')
 
 
@@ -40,7 +45,10 @@
           	{{ Form::text('contactno') }}
           </div>
           
-          
+          <div class="form_row">
+                {{ $captchaHtml }}
+                {{ Form::text('CaptchaCode', null, array('id' => 'CaptchaCode')) }}
+          </div>
           <div class="form_row">
           	{{ Form::submit('Sign up') }}
           	</div>

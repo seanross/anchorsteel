@@ -180,7 +180,7 @@ footer {
             <td class="service">{{ $order->product->name }}</td>
             <td class="unit">{{ $order->price }}</td>
             <td class="qty">{{ $order->quantity }}</td>
-            <td class="total">{{ $order->price}}</td>
+            <td class="total">{{ $order->getSubTotal() }}</td>
           </tr>
             @endforeach
           <tr>
@@ -189,11 +189,11 @@ footer {
           </tr>
           <tr>
             <td colspan="3">TOTAL QUANTITY</td>
-            <td class="total">{{ $transaction->orders->sum('quantity') }}</td>
+            <td class="total">{{ $transaction->getTotalQuantity() }}</td>
           </tr>
            <tr>
             <td colspan="3" class="grand total">TOTAL PRICE</td>
-            <td class="grand total">{{ $transaction->orders->sum('price') }}</td>
+            <td class="grand total">{{ $transaction->getGrandTotal() }}</td>
           </tr>
         </tbody>
       </table>

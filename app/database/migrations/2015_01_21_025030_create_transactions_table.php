@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateTransactionsTable extends Migration {
@@ -16,6 +15,7 @@ class CreateTransactionsTable extends Migration {
                 $transaction->increments('id');
                 $transaction->integer('user_id');
                 $transaction->string('status');
+                $transaction->string('received_by')->nullable();
                 $transaction->timestamps();
             });
 	}

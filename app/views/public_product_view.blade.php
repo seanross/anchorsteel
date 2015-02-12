@@ -27,11 +27,18 @@
                             Description :<span class="blue"> {{ $p->profile }} </span><br />
                         </div>
                         <div class="prod_price_big">
-                            <span class="reduce">{{ $p->price }} PHP</span>
-                            <span class="price">{{ $p->price - ($p->price * ($p->discount/100)) }} PHP</span>
+                            @if($p->discount > 0)
+                            <span class="reduce">{{ $p->price }} PHP</span> 
+                            <span class="price">{{ $p->getDiscountedPrice() }} PHP</span>
+                            @else
+                            <span class="price">{{ $p->price }} PHP</span> 
+                            @endif
                         </div>
-                        <a href="{{ asset('cart/add/'. $p->id)}}" class="prod_buy">add to cart</a>
-                    
+                        @if($p->discount > 0)
+                            <a href="{{ asset('cart/add/'. $p->id)}}" class="prod_buy">Add to Cart</a> 
+                        @else
+                          SORRY! OUT OF STOCK.
+                        @endif
                     </div>
                 </div>
             </div>

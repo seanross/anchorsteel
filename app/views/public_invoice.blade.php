@@ -216,6 +216,7 @@ footer {
     </main>
     <footer>
       Invoice was created on a computer and is valid without the signature and seal.
+      Wait for our team to call you for purchase instructions once you have send the order request.
     </footer>
   </body>
 </html>

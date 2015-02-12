@@ -152,7 +152,10 @@ footer {
       <h1><img src="{{ asset('images/shoppingcart.png') }}"> CART ITEMS <img src="{{ asset('images/shoppingcart.png') }}"></h1>
     
     <div id="company" class="clearfix">
-        <div><a href="{{ url('cart/invoice/preview') }}" class="prod_buy">Finalize Cart</a>   <a href="#" class="prod_details">Clear Cart</a></div>
+        <div>
+            <a href="{{ url('cart/invoice/preview') }}" class="prod_buy">Finalize Cart</a>
+            <a href="{{ url('cart/clear') }}" class="prod_details">Clear Cart</a>
+        </div>
       </div>
       <div id="project">
 <!--        <div><span>PROJECT</span> Website development</div>-->

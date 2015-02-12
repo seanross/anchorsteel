@@ -12,4 +12,8 @@ class Order extends \Eloquent {
         public function product(){
             return $this->belongsTo('Product');
         }
+        
+        public function getSubTotal(){
+            return $this->quantity * $this->price;
+        }
 }

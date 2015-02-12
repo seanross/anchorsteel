@@ -9,7 +9,8 @@
 	"way/generators": "~2.0",
 	"gloudemans/shoppingcart": "~1.2",
 	"intervention/image": "~2.0",
-	"zizaco/entrust": "1.2.*@dev"
+	"zizaco/entrust": "1.2.*@dev",
+        "captcha-com/laravel-captcha": "3.*"
   },
   "autoload": {
 	"classmap": [

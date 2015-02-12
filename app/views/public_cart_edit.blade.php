@@ -31,6 +31,7 @@
                         <div class="product_title_big">{{ $p->name }}</div>
                         <div class="specifications"> Available: <span class="blue">{{ $p->stock }} In stock</span><br />
                             Category :<span class="blue"> {{ $p->category->name }}</span><br />
+                            Warehouse: <span class="blue">{{ $p->warehouse->name }}</span><br />
                             Manufacturer: <span class="blue"> {{ $p->manufacturer->name }}</span><br />
                             Description :<span class="blue"> {{ $p->profile }} </span><br />
                         </div>
