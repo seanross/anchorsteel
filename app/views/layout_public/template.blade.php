@@ -36,6 +36,7 @@
    @if(Session::has('message'))
         <p class="alert">{{ Session::get('message') }}</p>
     @endif
+    
     <div class="left_content">
 
         @include('layout_public.leftbar')

@@ -52,7 +52,7 @@ Route::get('/', function()
 Route::get('/register', function()
 {
     $captchaConfig = array(
-      'CaptchaId' => 'ExampleCaptcha', // an unique Id for the Captcha instance
+      'CaptchaId' => 'SignUpCaptcha', // an unique Id for the Captcha instance
       'UserInputId' => 'CaptchaCode' // the Id of the Captcha code input textbox
     );
     $captcha = BotDetectCaptcha\LaravelCaptcha\BotDetectLaravelCaptcha::GetCaptchaInstance($captchaConfig);
@@ -86,33 +86,60 @@ Route::get('/logout', function()
 });
 
 
-Route::post('/signup', function()
-{
-    if (Request::isMethod('post')) {
-        $code = Input::get('CaptchaCode');
-        $captchaConfig = array(
-            'CaptchaId' => 'ExampleCaptcha', // an unique Id for the Captcha instance
-            'UserInputId' => 'CaptchaCode' // the Id of the Captcha code input textbox
-          );
-        $captcha = BotDetectCaptcha\LaravelCaptcha\BotDetectLaravelCaptcha::GetCaptchaInstance($captchaConfig);
-        $isHuman = $captcha->Validate($code);
+Route::post('/signup', function(){
+    // validate the user-entered Captcha code when the form is submitted
+    $code = Input::get('CaptchaCode');
+    $captchaConfig = array(
+        'CaptchaId' => 'SignUpCaptcha', // an unique Id for the Captcha instance
+        'UserInputId' => 'CaptchaCode' // the Id of the Captcha code input textbox
+      );
+    $captcha = BotDetectCaptcha\LaravelCaptcha\BotDetectLaravelCaptcha::GetCaptchaInstance($captchaConfig);
 
+    $isHuman = $captcha->Validate($code);
+
+    $rules = array(
+            'username'         => 'required|unique:users',
+            'email'            => 'required|email',
+            'password'         => 'required'
+//            'password_confirm' => 'required|same:password'
+        );
+
+      $validator  = Validator::make(Input::all(), $rules);
+
+      $message = '';
+      $captchaValidationStatus = '';
+
+      if ($isHuman && $validator->fails()) {
+        // TODO: send email
+        $message = 'Your message was sent successfully';
+        $user = new User();
+        $user->email = Input::get('email');
+        $user->username = Input::get('username');
+        $user->password = Hash::make(Input::get('password'));
+        $user->firstname = Input::get('firstname');
+        $user->middlename = Input::get('middlename');
+        $user->lastname = Input::get('lastname');
+        $user->address = Input::get('address');
+        $user->contactno = Input::get('contactno');
+        $user->save();
+        // reset Captcha status after each sent email, since we don't want the user to
+          // be able to send an unlimited number of emails after solving the Captcha once
+        
+        $captcha->Reset();
+      } else {
         if ($isHuman) {
-            $user = new User();
-            $user->email = Input::get('email');
-            $user->username = Input::get('username');
-            $user->password = Hash::make(Input::get('password'));
-            $user->firstname = Input::get('firstname');
-            $user->middlename = Input::get('middlename');
-            $user->lastname = Input::get('lastname');
-            $user->address = Input::get('address');
-            $user->contactno = Input::get('contactno');
-            $user->save();
-            return Redirect::to('/');
+          $captchaValidationStatus = 'Wrong code. Try again please.';
         } else {
-            return Redirect::to('/register');
+          $message = 'An error occurred while sending.';
         }
-    }
+      }
+
+      return Redirect::to('/register')
+                              ->withInput()
+                              ->withErrors($validator)
+                              ->with('captchaValidationStatus', $captchaValidationStatus)
+                              ->with('message', $message);
+    
 });
 
 

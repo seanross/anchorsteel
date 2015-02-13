@@ -23,13 +23,13 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * @var array
 	 */
 	protected $hidden = array('password', 'remember_token');
-
         
         //One to Many
         public function transactions(){
             return $this->hasMany('Transaction');
         }
         
+        //Transient method to para madali makuha full name ng user :)
         public function getFullName(){
             if(strlen($this->middlename)>0){
                 return $this->firstname . " " . $this->middlename . " " . $this->lastname;
@@ -37,5 +37,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
                 return $this->firstname . " " . $this->lastname;
             }
         }
+        
+        
         
 }
