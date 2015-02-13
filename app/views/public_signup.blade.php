@@ -34,30 +34,34 @@
                     </p> 
                  @endif
           </div>
-<!--          <div class="form_row">
-          	{{ Form::label('password', 'Password', array('class' => 'contact')) }}
-          	{{ Form::password('password', '', array(
-                        'class' => 'contact_input'
-                    )) }}
-                @if ($errors->has('password'))
+            <div class="form_row">
+              <label class="contact"><strong>Password:</strong></label>
+              <input type="password" name="password" class="contact_input" />
+              @if ($errors->has('password')) 
                     <p class="help-block">
                         {{ $errors->first('password') }}
                     </p> 
                  @endif
-          </div>-->
-            <div class="form_row">
-              <label class="contact"><strong>Password:</strong></label>
-              <input type="password" class="contact_input" />
             </div>
             <div class="form_row">
               <label class="contact"><strong>Confirm Password:</strong></label>
-              <input type="password" class="contact_input" />
+              <input type="password" name="password_confirm" class="contact_input" />
+              @if ($errors->has('password_confirm')) 
+                    <p class="help-block">
+                        {{ $errors->first('password_confirm') }}
+                    </p> 
+                 @endif
             </div>
           <div class="form_row">
           	{{ Form::label('firstname', 'First Name', array('class' => 'contact')) }}
           	{{ Form::text('firstname', Input::old('firstname'), array(
                         'class' => 'contact_input'
                     )) }}
+                    @if ($errors->has('firstname')) 
+                    <p class="help-block">
+                        {{ $errors->first('firstname') }}
+                    </p> 
+                 @endif
           </div>
           <div class="form_row">
           	{{ Form::label('middlename', 'Middle Name', array('class' => 'contact')) }}
@@ -70,18 +74,33 @@
           	{{ Form::text('lastname', Input::old('name'), array(
                         'class' => 'contact_input'
                     )) }}
+                    @if ($errors->has('lastname')) 
+                    <p class="help-block">
+                        {{ $errors->first('lastname') }}
+                    </p> 
+                 @endif
           </div>
           <div class="form_row">
           	{{ Form::label('address', 'Address', array('class' => 'contact')) }}
           	{{ Form::text('address', Input::old('name'), array(
                         'class' => 'contact_input'
                     )) }}
+                    @if ($errors->has('address')) 
+                    <p class="help-block">
+                        {{ $errors->first('address') }}
+                    </p> 
+                 @endif
           </div>
           <div class="form_row">
           	{{ Form::label('contactno', 'Contact No.', array('class' => 'contact')) }}
           	{{ Form::text('contactno', Input::old('name'), array(
                         'class' => 'contact_input'
                     )) }}
+                    @if ($errors->has('contactno')) 
+                    <p class="help-block">
+                        {{ $errors->first('contactno') }}
+                    </p> 
+                 @endif
           </div>
           
           <div class="form_row">

@@ -100,8 +100,12 @@ Route::post('/signup', function(){
     $rules = array(
             'username'         => 'required|unique:users',
             'email'            => 'required|email',
-            'password'         => 'required'
-//            'password_confirm' => 'required|same:password'
+            'password'         => 'required',
+            'password_confirm' => 'required|same:password',
+            'address'          => 'required',
+            'contactno'        => 'required',
+            'firstname'        => 'required',
+            'lastname'         => 'required'
         );
 
       $validator  = Validator::make(Input::all(), $rules);
@@ -111,7 +115,7 @@ Route::post('/signup', function(){
 
       if ($isHuman && $validator->fails()) {
         // TODO: send email
-        $message = 'Your message was sent successfully';
+        $message = 'You successfully registered!';
         $user = new User();
         $user->email = Input::get('email');
         $user->username = Input::get('username');
@@ -154,20 +158,38 @@ Route::get('/admin/user/edit/{id}',  array('before' => 'adminOnly', function($id
 	return View::make('admin_user_edit')->with($data);
 }));
 
-Route::post('/admin/user/update',  array('before' => 'adminOnly', function()
-{
-	$u = User::find(Input::get('id'));
-	$u->email = Input::get('email');
-	$u->firstname = Input::get('firstname');
-	$u->middlename = Input::get('middlename');
-	$u->lastname = Input::get('lastname');
-	$u->address = Input::get('address');
-	$u->contactno = Input::get('contactno');
-        $u->roles()->detach(); //need to para madelete ung mga current na relationship
-	$u->attachRole(Role::find(Input::get("role"))); // then attach para malagyan
-	$u->save();
+Route::post('/admin/user/update',  array('before' => 'adminOnly', function(){
+    $rules = array(
+//            'username'         => 'required|unique:users',
+        'email'            => 'required|email',
+        'password'         => 'required',
+        'password_confirm' => 'required|same:password',
+        'address'          => 'required',
+        'contactno'        => 'required',
+        'firstname'        => 'required',
+        'lastname'         => 'required'
+    );
 
-	return Redirect::to('/admin/user/list');
+    $validator  = Validator::make(Input::all(), $rules);
+    $message = '';
+      
+    if ($validator->fails()) {
+        $u = User::find(Input::get('id'));
+        $u->email = Input::get('email');
+        $u->firstname = Input::get('firstname');
+        $u->middlename = Input::get('middlename');
+        $u->lastname = Input::get('lastname');
+        $u->address = Input::get('address');
+        $u->contactno = Input::get('contactno');
+        $u->roles()->detach(); //need to para madelete ung mga current na relationship
+        $u->attachRole(Role::find(Input::get("role"))); // then attach para malagyan
+        $u->save();
+        $message = 'Successfully updated user.';
+      }
+        return Redirect::to('/admin/user/edit/'. $u->id)
+                              ->withInput()
+                              ->withErrors($validator)
+                              ->with('message', $message);
 }));
 
 Route::get('/admin/user/list',  array('before' => 'adminOnly', function(){
