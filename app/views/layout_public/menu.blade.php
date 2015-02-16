@@ -5,7 +5,7 @@
     <li class="divider"></li>
     <li><a href="#" class="nav">Shipping </a></li>
     <li class="divider"></li>
-    <li><a href="contact.html" class="nav">Contact Us</a></li>
+    <li><a href="{{ url('/contact_us') }}" class="nav">Contact Us</a></li>
     <li class="divider"></li>
     <li><a href="details.html" class="nav">Details</a></li>
     @if(!Auth::check())

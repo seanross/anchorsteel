@@ -377,7 +377,7 @@ Route::post('/product/search', function(){
     foreach($searchTerms as $term){
         $query->where('name', 'LIKE', '%'. $term .'%');
     }
-	return View::make('public_product_list')->with('products', $query->get());
+return View::make('public_product_search')->with('products', $query->get());
 });
 
 
@@ -454,3 +454,43 @@ Route::get('/my/transactions/list', array('before' => 'buyerOnly', function(){
     $transactions = Transaction::where('user_id', Auth::id())->get(); 
     return View::make('public_my_transactions_list')->with('transactions', $transactions);
 }));
+
+Route::get('/contact_us', function(){
+    return View::make('public_contact_us');
+});
+
+Route::post('/contact_us', function(){
+
+    //Get all the data and store it inside Store Variable
+    $data = Input::all();
+
+    //Validation rules
+    $rules = array (
+        'fullname' => 'required',
+        'phone_number'=>'numeric|min:8',
+        'email' => 'required|email',
+        'message' => 'required|min:25'
+    );
+
+    //Validate data
+    $validator  = Validator::make ($data, $rules);
+
+    //If everything is correct than run passes.
+    if ($validator -> passes()){
+
+        //Send email using Laravel send function
+        Mail::send('emails.contact_us', $data, function($message) use ($data)
+        {
+//email 'From' field: Get users email add and name
+            $message->from($data['email'] , $data['fullname']);
+//email 'To' field: change this to emails that you want to be notified.                    
+$message->to('email_ni_sean@yahoo.com', 'Anchor Steel')->cc('email.ni.sean@gmail.com')->subject('Contact request');
+
+        });
+
+        return View::make('public_contact_us');  
+    }else{
+//return contact form with errors
+        return Redirect::to('/contact_us')->withErrors($validator);
+    }      
+});
