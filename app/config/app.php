@@ -126,6 +126,8 @@ return array(
                 'Zizaco\Entrust\EntrustServiceProvider',                        //ENTRUST ROLES LIB
                 'Gloudemans\Shoppingcart\ShoppingcartServiceProvider',          //SHOPPING CART LIB
                 'BotDetectCaptcha\LaravelCaptcha\LaravelCaptchaServiceProvider',//CAPTCHA LIB
+//                'Barryvdh\Debugbar\ServiceProvider',
+                'Barryvdh\DomPDF\ServiceProvider',                               //PDF GENERATOR LIB
 	),
 
 	/*
@@ -196,7 +198,8 @@ return array(
                 'Entrust'           => 'Zizaco\Entrust\EntrustFacade',          //ENTRUST ROLES LIB
                 'Cart'              => 'Gloudemans\Shoppingcart\Facades\Cart',  //SHOPPING CART LIB
                 'Carbon'            => 'Carbon\Carbon',                         //Date Helper
-                'BotCaptcha'        => 'BotDetectCaptcha\LaravelCaptcha\BotDetectLaravelCaptcha'//CAPTCHA LIB
+                'BotCaptcha'        => 'BotDetectCaptcha\LaravelCaptcha\BotDetectLaravelCaptcha',//CAPTCHA LIB
+                'PDF'               => 'Barryvdh\DomPDF\Facade',                 //PDF GENERATOR LIB
 	),
 
 );

@@ -343,8 +343,13 @@ Route::get('/admin/manufacturer/list',  array('before' => 'adminOnly',  function
 
 
 
-Route::get('/admin/transaction/list', array('before' => 'adminOnly',  function(){
-    return View::make('admin_transaction_list')->with('transactions', Transaction::orderBy('created_at', 'DESC')->get());
+Route::get('/admin/transaction/list/{where}', array('before' => 'adminOnly',  function($where){
+    $transactions =  Transaction::orderBy('created_at', 'DESC')->get();
+    if($where == 'pending' || $where == 'received' || $where == 'shipping' || $where == 'completed' || $where == 'cancelled'){
+        $transactions =  Transaction::where('status', '=', $where)->orderBy('created_at', 'DESC')->get();
+     
+    } 
+    return View::make('admin_transaction_list')->with('transactions', $transactions);
 }));
 
 Route::get('/admin/transaction/receive/{id}', array('before' => 'adminOnly',  function($id){
@@ -352,10 +357,23 @@ Route::get('/admin/transaction/receive/{id}', array('before' => 'adminOnly',  fu
     $transaction->status = 'received';
     $transaction->received_by = Auth::user()->username;
     $transaction->save();
-    return View::make('admin_transaction_receive')->with('transaction', $transaction);
+    return View::make('admin_invoice')->with('transaction', $transaction);
 }));
 
+Route::get('/admin/transaction/pdf/{id}', array('before' => 'adminOnly',  function($id){
+    $data['transaction'] = Transaction::find($id);
+    $pdf = PDF::loadView('admin_invoice', $data);
+    return $pdf->stream("Report.pdf");
+}));
 
+Route::get('/admin/transactions/pdf/{where}', array('before' => 'adminOnly',  function($where){
+    $data['transactions'] =  Transaction::orderBy('created_at', 'DESC')->get();
+    if($where == 'pending' || $where == 'received' || $where == 'shipping' || $where == 'completed' || $where == 'cancelled'){
+         $data['transactions'] =  Transaction::where('status', '=', $where)->orderBy('created_at', 'DESC')->get();
+    } 
+    $pdf = PDF::loadView('admin_invoice', $data);
+    return $pdf->stream("Report.pdf");
+}));
 
 
 Route::get('/product/list',function(){
